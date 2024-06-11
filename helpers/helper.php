@@ -34,10 +34,10 @@ function check($table, $column, $value)
   return $res;
 }
 
+/*-----------------------------------------------------------
+      autorization token
+-----------------------------------------------------------*/
 function   Autorization(array $data){
-
-
-
 
   if(empty($data["Authorization"])){
       $code=400;
@@ -77,20 +77,11 @@ function   Autorization(array $data){
   }
 
 
+}//end
 
-
-
-  //dep($data);
-        
-}
-
-
-
-
-//Elimina exceso de espacios entre palabras
-# ========================================================================================
-# =      FUNCTION PARAR LIMPIAR CAMPOS    =
-# =======================================================================================
+/*-----------------------------------------------------------
+      FUNCTION PARAR LIMPIAR CAMPOS  
+-----------------------------------------------------------*/
 function strClean($strCadena){
     $string = preg_replace(['/\s+/','/^\s|\s$/'],[' ',''], $strCadena);
     $string = trim($string); //Elimina espacios en blanco al inicio y al final
@@ -133,29 +124,34 @@ function JsonResponse(array $arrayData,int $code){
         header("Content-type: application/json");
         echo json_encode($arrayData,true);
     }
-}
-# ========================================================================================
-# =      GENERAR TOKEN    =
-# ========================================================================================
+}//end
+
+
+/*-----------------------------------------------------------
+      FUNCTION PARAR GENERAR
+-----------------------------------------------------------*/
+
 function generateToken($length = 32) {
     return bin2hex(random_bytes($length));
-}
+}//end
 
 
-# ========================================================================================
-# =      FUNCTION PARA INCRIPTAR   =
-# ========================================================================================
+/*-----------------------------------------------------------
+      FUNCTION PARAR ENCRYPTAR
+-----------------------------------------------------------*/
+
 function encryptID($id) {
   $key = KEY; // Reemplaza esto con tu clave de encriptación
   $method = METHOD; // Método de cifrado, puedes elegir otro si lo deseas
 
   $encrypted = openssl_encrypt($id, $method, $key);
   return base64_encode($encrypted);
-}
+}//
 
-# ========================================================================================
-# =      FUNCTION PARA DESINCRIPTAR   =
-# ========================================================================================
+
+/*-----------------------------------------------------------
+      FUNCTION PARAR DESINCRIPTAR
+-----------------------------------------------------------*/
 function decryptID($ID) {
   $key = KEY; // Reemplaza esto con tu clave de encriptación
   $method =METHOD; // Método de cifrado, debe ser el mismo utilizado para cifrar
@@ -163,11 +159,12 @@ function decryptID($ID) {
   $encrypted = base64_decode($ID);
   $decrypted = openssl_decrypt($encrypted, $method, $key);
   return $decrypted;
-}
+}///END
 
-# ========================================================================================
-# =     FUNCTION PARA FORMATEAR FECHA =
-# ========================================================================================
+
+/*-----------------------------------------------------------
+     FUNCTION PARA FORMATEAR FECHA 
+-----------------------------------------------------------*/
  function transformarFechaParaDB($fecha) {
     $timestamp = strtotime($fecha);
     if ($timestamp === false) {
@@ -175,38 +172,36 @@ function decryptID($ID) {
     }
     $fechaParaDB = date('d/m/Y', $timestamp);
     return $fechaParaDB;
-}
+}//END
 
 
-
-# ========================================================================================
-# =      FUNCTION PARA ENVIAR EMAIL    =
-# ========================================================================================
+/*-----------------------------------------------------------
+      FUNCTION PARA ENVIAR EMAIL  
+-----------------------------------------------------------*/
 function send_mail($data,$template){
-    $para      = $data['email'];
-    $titulo    = $data['asunto'];
+    $to      = $data['email'];
+    $title    = $data['subjet'];
 
     // Para enviar un correo HTML, debe establecerse la cabecera Content-type
-    $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
-    $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+    $header  = 'MIME-Version: 1.0' . "\r\n";
+    $header .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
 
     // Cabeceras adicionales
     //$cabeceras .= 'To: Mary <mary@example.com>, Kelly <kelly@example.com>' . "\r\n";
-    $cabeceras .= 'From: mini-framwork <miniframwork-php@gmail.com>' . "\r\n";
+    $header .= 'From: mini-framwork <miniframwork-php@gmail.com>' . "\r\n";
     //$cabeceras .= 'Cc: birthdayarchive@example.com' . "\r\n";
     //$cabeceras .= 'Bcc: birthdaycheck@example.com' . "\r\n";
     ob_start();
     require_once("views/mails/".$template.".php");
     $message=ob_get_clean();
 
-    $send=mail($para, $titulo, $mensaje, $cabeceras);
+    $send=mail($para, $titulo, $mensaje, $header);
     return $send;
-}
+}//END
 
-
-# ========================================================================================
-# =      FUNCTION PARA ENVIAR EMAIL EN LOCAL    =
-# ========================================================================================
+/*-----------------------------------------------------------
+       FUNCTION PARA ENVIAR EMAIL EN LOCAL 
+-----------------------------------------------------------*/
 function send_mail_local($data,$template){
 $mail = new PHPMailer(true);
 

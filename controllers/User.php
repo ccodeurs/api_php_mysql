@@ -139,12 +139,12 @@ function store(){
                JsonResponse($response,$code);
                 die();
             }
-            $first_name= strtolower(trim($_POST['first_name'])) ;
-            $last_name= strtolower(trim($_POST['last_name'])) ;
-            $email= strtolower(trim($_POST['email'])) ;
+            $first_name= strtolower(strClean($_POST['first_name'])) ;
+            $last_name= strtolower(strClean($_POST['last_name'])) ;
+            $email= strtolower(strClean($_POST['email'])) ;
             $password=$_POST['password'];
-            $rol= strtolower(trim( $_POST['rol']));
-            $status= strtolower(trim($_POST['status'])) ;
+            $rol= strtolower(strClean( $_POST['rol']));
+            $status= strtolower(strClean($_POST['status'])) ;
             $password_hash=password_hash( $password,PASSWORD_DEFAULT);
 
             $exist=$this->model->ShowByEmail($email);
@@ -209,12 +209,12 @@ function update($id=null)
 
 
 
-        $first_name = isset($_POST['first_name']) ? strtolower(trim($_POST['first_name'])) : null;
-        $last_name = isset($_POST['last_name']) ? strtolower(trim($_POST['last_name'])) : null;
-        $email = isset($_POST['email']) ? strtolower(trim($_POST['email'])) : null;
-        $password = isset($_POST['password']) ? trim($_POST['password']) : null;
-        $rol = isset($_POST['rol']) ? strtolower(trim($_POST['rol'])) : null;
-        $status = isset($_POST['status']) ? strtolower(trim($_POST['status'])) : null;
+        $first_name = isset($_POST['first_name']) ? strtolower(strClean($_POST['first_name'])) : null;
+        $last_name = isset($_POST['last_name']) ? strtolower(strClean($_POST['last_name'])) : null;
+        $email = isset($_POST['email']) ? strtolower(strClean($_POST['email'])) : null;
+        $password = isset($_POST['password']) ? strClean($_POST['password']) : null;
+        $rol = isset($_POST['rol']) ? strtolower(strClean($_POST['rol'])) : null;
+        $status = isset($_POST['status']) ? strtolower(strClean($_POST['status'])) : null;
 
 
           if (empty(  $first_name)) {
@@ -387,8 +387,6 @@ function update_image($id)
     }
 }//END
 
-//git branch -M main
-//git push -u origin main
 
 /*-----------------------------------------------------------
         ELIMINAR USUARIO
@@ -485,16 +483,18 @@ function delete($id=null,$type_delete="normal"){
        BUSCAR USUARIO
 -----------------------------------------------------------*/
 function search($search)
+{
+    $response=[];
+    if($this->method=="GET")
     {
-       $response=[];
-       if($this->method=="GET"){
-        if (!empty($search)) {
+        if (!empty($search)) 
+        {
             $user=$this->model->Search($search);
-           $code=200;
-           $response=array("status"=>true,"data"=> $user );
-           JsonResponse($response,$code);
-    }
-          
+            $code=200;
+            $response=array("status"=>true,"data"=> $user );
+            JsonResponse($response,$code);
+        }
+
     } 
 }//END
 
@@ -504,7 +504,8 @@ function search($search)
 -----------------------------------------------------------*/
 function login()
 {
-    if($this->method=="POST"){
+    if($this->method=="POST")
+    {
         $_POST=json_decode(file_get_contents("php://input"),true);
         $email=trim( strtolower($_POST['email']) );
         $password=trim(  $_POST['password']);
@@ -512,11 +513,14 @@ function login()
         $user=$login[0];
 
 
-        if(!empty($user)){
+        if(!empty($user))
+        {
 
-            if( !empty( $password) || password_verify($password,$user['password'])){
+            if( !empty( $password) || password_verify($password,$user['password']))
+            {
                
-                if($user['status'] !=1){
+                if($user['status'] !=1)
+                {
 
                     $code=400;
                     $response=array("status"=>false,"msg"=>"NO PUEDES ACCEDER PORQUE TU CUENTA  ESTA DESACTIVADO POR FAVOR CONTACTA EL ADMINISTRADOR PARA ACTIVARLO" );
@@ -537,12 +541,12 @@ function login()
                 }
 
 
-                }else{
-                    $code=400;
-                    $response=array("status"=>false,"msg"=>"LA CONTRASEÑA ES INCORRECTO INTENTE DE NUEVO" );
-                    JsonResponse($response,$code);
-                    return;  
-                }
+            }else{
+                $code=400;
+                $response=array("status"=>false,"msg"=>"LA CONTRASEÑA ES INCORRECTO INTENTE DE NUEVO" );
+                JsonResponse($response,$code);
+                return;  
+            }
            
         }else{
             $code=400;
