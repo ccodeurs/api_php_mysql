@@ -1,0 +1,18 @@
+
+ALGUNAS CONSEDIRACCIÓNES
+
+1-creame base de dato  y importa la tabla users
+---------------------------------------------------
+2 - no olvide cambiar la url por tu dominio
+const BASEURL = "http://localhost/php/sistemas_php/api_restaurante/";
+------------------------------------------
+3 - 
+cambia estos datos por las tuyas
+
+esta en config/config.php
+-------------------------
+const APPNAME = "MINI FRAMWORK";
+const SEVERNAME = "localhost";
+const USERNAME = "root";
+const PASS = "";
+const DBNAME = "api_php_mysql";
